@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[77]:
-
-
 #import the data
 import pandas as pd
 import numpy as np
@@ -27,22 +21,6 @@ for i in range(10):
     df[df.columns[i]] += coup * months_from_last_payment / 12
     
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[78]:
-
-
 #compute yield by ridder
 def half_year_yield_rate(yield_rate, months_to_next_payment , terms_to_mature, coupon, current_value):
     return yield_rate**(months_to_next_payment/6) * (coupon * (yield_rate**(terms_to_mature + 1) - 1)/(yield_rate - 1) + 100 * (yield_rate ** terms_to_mature)) - current_value
@@ -58,15 +36,9 @@ for i in range(10):
                                                      )**(-2)
 
 
-# In[79]:
-
-
 df_yield["years_to_mature"] = months_to_mature/12
 df_yield.sort_values("years_to_mature",inplace= True)
 df_yield.set_index("years_to_mature", inplace = True)
-
-
-# In[80]:
 
 
 pt = (df_yield - 1).plot(grid = True,figsize = (20,10),title = "yield curve")
@@ -74,19 +46,11 @@ pt.set_xlabel("time to maturity (yr)")
 pt.set_ylabel("yield rate")
 
 
-# In[98]:
-
 
 terms_to_mature
 
 
-# In[93]:
-
-
 df_spot
-
-
-# In[129]:
 
 
 df_spot = df_yield.copy()
@@ -106,15 +70,10 @@ for i in range(1,10):
         df_spot.iloc[i,j] = np.power((100 + coup[i]/2)/pre , 1/df_spot.index[i])
 
 
-# In[132]:
-
-
 pt = (df_spot - 1).plot(grid = True,figsize = (20,10),title = "spot curve")
 pt.set_xlabel("time to maturity (yr)")
 pt.set_ylabel("spot rate")
 
-
-# In[121]:
 
 
 # compute the forward
@@ -122,9 +81,6 @@ yd = df_yield.values
 forward = np.zeros((4,10))
 for i in range(4):
     forward[i] = ((yd[i+1])**(i+2) / yd[0])**(1/(i+1))
-
-
-# In[131]:
 
 
 df_forward = pd.DataFrame(forward)
@@ -135,13 +91,6 @@ pt2.set_xlabel("1 yr to i yr")
 pt2.set_ylabel("foward rate")
 
 
-# In[ ]:
-
-
-
-
-
-# In[133]:
 
 
 # log return of yield
@@ -153,9 +102,6 @@ print('cov for log return')
 print(cov_X)
 
 
-# In[134]:
-
-
 # log return of forward
 log_forward = np.zeros((4,9))
 for i in range(4):
@@ -165,23 +111,16 @@ print('cov for log forward')
 print(cov_for)
 
 
-# In[126]:
-
 
 #eigenvalue and eigenvectors
 w_f, v_f = np.linalg.eig(cov_for)
 w_X, v_X = np.linalg.eig(cov_X)
 
 
-# In[135]:
-
 
 print ("eigenvalue and vectors for cov X")
 print(w_X)
 print(v_X)
-
-
-# In[136]:
 
 
 print ("eigenvalue and vectors for cov forward")
